@@ -2,7 +2,7 @@
   "name": "Smart Money Manager",
   "short_name": "MoneyMgr",
   "description": "A personal finance tracker to manage your wealth and expenses.",
-  "start_url": "smart-money-manager.html",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#f8fafc",
   "theme_color": "#4f46e5",
