@@ -1,7 +1,3 @@
-Nu, nu am inclus o secțiune despre instalarea pe mobil. Iată README-ul complet, cu o secțiune nouă pentru **instalare pe mobil (PWA-style / Add to Home Screen)**:
-
----
-
 # Smart Money Manager
 
 **Smart Money Manager** is an intuitive, web-based financial tool designed to help you monitor your wealth, income, and expenses with real-time analytics and interactive charts.
