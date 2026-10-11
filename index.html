@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#4f46e5">
-<meta name="description" content="Smart Money Manager - track your finances intelligently">
+<meta name="description" content="Smart Money Manager — track your finances intelligently">
 <title>Smart Money Manager</title>
 <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Smart%20Money%20Manager%22%2C%22short_name%22%3A%22Money%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f8fafc%22%2C%22theme_color%22%3A%22%234f46e5%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A%2F%2Fwww.w3.org%2F2000%2Fsvg%2527%2520viewBox%253D%25270%25200%252064%252064%2527%253E%253Crect%2520width%253D%252764%2527%2520height%253D%252764%2527%2520rx%253D%252714%2527%2520fill%253D%2527%25234f46e5%2527%2F%253E%253Ctext%2520x%253D%252732%2527%2520y%253D%252742%2527%2520font-size%253D%252734%2527%2520fill%253D%2527white%2527%2520text-anchor%253D%2527middle%2527%2520font-family%253D%2527sans-serif%2527%253E%2524%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%2264x64%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -53,7 +53,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'Inter', 'Noto Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
@@ -68,29 +68,79 @@ body {
 
 .container { width: 100%; max-width: 1100px; }
 
+/* ============ HEADER ============ */
 header {
     margin-bottom: 30px;
     text-align: center;
     position: relative;
 }
 
-header h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 8px; }
-header p { color: var(--text-light); }
+header h1 {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 12px;
+}
 
-.theme-toggle {
-    position: absolute;
-    right: 0;
-    top: 0;
+header p {
+    color: var(--text-light);
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.header-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.lang-selector {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.lang-selector select {
+    appearance: none;
+    -webkit-appearance: none;
     background: var(--card);
     border: 1px solid var(--border);
     color: var(--text);
-    padding: 8px 12px;
+    padding: 10px 36px 10px 16px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    box-shadow: var(--shadow);
+    transition: background 0.2s, border-color 0.2s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
+.lang-selector select:hover { background-color: var(--bg-alt); }
+.lang-selector select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 16px;
     border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: 1.1rem;
     box-shadow: var(--shadow);
+    transition: background 0.2s, transform 0.1s;
 }
 .theme-toggle:hover { background: var(--bg-alt); }
+.theme-toggle:active { transform: scale(0.96); }
 
 .dashboard {
     display: grid;
@@ -303,9 +353,7 @@ button.danger:hover { background: #fecaca; }
 
 .chart-container { height: 300px; position: relative; }
 
-.budget-item {
-    margin-bottom: 14px;
-}
+.budget-item { margin-bottom: 14px; }
 .budget-header {
     display: flex;
     justify-content: space-between;
@@ -400,206 +448,260 @@ button.danger:hover { background: #fecaca; }
     margin-top: 20px;
 }
 
-.sr-only {
-    position: absolute;
-    width: 1px; height: 1px;
-    padding: 0; margin: -1px;
-    overflow: hidden;
-    clip: rect(0,0,0,0);
-    white-space: nowrap;
-    border: 0;
-}
-
 .full-width { grid-column: span 2; }
 @media (max-width: 768px) { .full-width { grid-column: span 1; } }
+
+/* ============ FOOTER / DONATE ============ */
+.footer {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+}
+
+.coffee-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    border-radius: 999px;
+    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+}
+
+.coffee-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(217, 119, 6, 0.5);
+    filter: brightness(1.05);
+}
+
+.coffee-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(217, 119, 6, 0.35);
+}
+
+.coffee-btn:focus-visible {
+    outline: 3px solid rgba(245, 158, 11, 0.5);
+    outline-offset: 3px;
+}
+
+.coffee-btn .coffee-icon {
+    font-size: 1.25rem;
+    animation: steam 3s ease-in-out infinite;
+    display: inline-block;
+}
+
+@keyframes steam {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50%      { transform: translateY(-3px) rotate(-3deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .coffee-btn .coffee-icon { animation: none; }
+}
+
+.footer-note {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    opacity: 0.85;
+}
 </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Smart Money Manager</h1>
-        <p>Track your wealth with intelligence.</p><b></b>
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+        <h1 data-i18n="app.title">Smart Money Manager</h1>
+        <p data-i18n="app.subtitle">Track your wealth with intelligence.</p>
+        <div class="header-controls">
+            <div class="lang-selector">
+                <select id="langSelector" aria-label="Language / Limbă / Jezik">
+                    <option value="ro">🇷🇴 Română</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="sr-Latn">🇷🇸 Srpski (latinica)</option>
+                    <option value="sr-Cyrl">🇷🇸 Српски (ћирилица)</option>
+                </select>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
+        </div>
     </header>
 
     <div class="dashboard">
         <div class="card balance-card">
-            <h3>Total Balance</h3>
-            <div class="amount" id="totalBalance" aria-live="polite">$0.00</div>
+            <h3 data-i18n="card.balance">Total Balance</h3>
+            <div class="amount" id="totalBalance" aria-live="polite">—</div>
         </div>
         <div class="card income-card">
-            <h3>Total Income</h3>
-            <div class="amount" id="totalIncome" aria-live="polite">$0.00</div>
+            <h3 data-i18n="card.income">Total Income</h3>
+            <div class="amount" id="totalIncome" aria-live="polite">—</div>
         </div>
         <div class="card expense-card">
-            <h3>Total Expenses</h3>
-            <div class="amount" id="totalExpense" aria-live="polite">$0.00</div>
+            <h3 data-i18n="card.expense">Total Expenses</h3>
+            <div class="amount" id="totalExpense" aria-live="polite">—</div>
         </div>
         <div class="card">
-            <h3>This Month's Balance</h3>
-            <div class="amount" id="monthBalance" aria-live="polite">$0.00</div>
+            <h3 data-i18n="card.monthBalance">This Month's Balance</h3>
+            <div class="amount" id="monthBalance" aria-live="polite">—</div>
         </div>
     </div>
 
     <div class="main-content">
         <!-- Add form -->
         <div class="card">
-            <div class="section-title">Add Transaction</div>
+            <div class="section-title" data-i18n="section.addTransaction">Add Transaction</div>
             <form id="transactionForm" novalidate>
                 <div class="form-group">
-                    <label for="desc">Description</label>
-                    <input type="text" id="desc" placeholder="e.g., Groceries, Salary" required maxlength="100" autocomplete="off">
+                    <label for="desc" data-i18n="label.description">Description</label>
+                    <input type="text" id="desc" data-i18n-placeholder="placeholder.description" required maxlength="100" autocomplete="off">
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="amount">Amount ($)</label>
+                        <label for="amount" data-i18n="label.amount">Amount</label>
                         <input type="number" id="amount" placeholder="0.00" step="0.01" min="0.01" required>
                     </div>
                     <div class="form-group">
-                        <label for="date">Date</label>
+                        <label for="date" data-i18n="label.date">Date</label>
                         <input type="date" id="date" required>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="type">Type</label>
+                        <label for="type" data-i18n="label.type">Type</label>
                         <select id="type">
-                            <option value="income">Income</option>
-                            <option value="expense" selected>Expense</option>
+                            <option value="income" data-i18n="type.income">Income</option>
+                            <option value="expense" data-i18n="type.expense" selected>Expense</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="category">Category</label>
-                        <select id="category">
-                            <option value="Food">Food</option>
-                            <option value="Rent">Rent</option>
-                            <option value="Salary">Salary</option>
-                            <option value="Entertainment">Entertainment</option>
-                            <option value="Shopping">Shopping</option>
-                            <option value="Transport">Transport</option>
-                            <option value="Utilities">Utilities</option>
-                            <option value="Health">Health</option>
-                            <option value="Other">Other</option>
-                        </select>
+                        <label for="category" data-i18n="label.category">Category</label>
+                        <select id="category"></select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                         <input type="checkbox" id="recurring" style="width: auto;">
-                        Recurring transaction (monthly)
+                        <span data-i18n="label.recurring">Recurring transaction (monthly)</span>
                     </label>
                 </div>
-                <button type="submit">➕ Add Transaction</button>
+                <button type="submit" data-i18n="btn.addTransaction">➕ Add Transaction</button>
             </form>
         </div>
 
         <!-- Spending chart -->
         <div class="card">
-            <div class="section-title">Spending Analytics</div>
+            <div class="section-title" data-i18n="section.spending">Spending Analytics</div>
             <div class="chart-container">
-                <canvas id="spendingChart" aria-label="Spending chart by category"></canvas>
+                <canvas id="spendingChart"></canvas>
             </div>
         </div>
 
         <!-- Budgets -->
         <div class="card">
-            <div class="section-title">Monthly Budgets</div>
+            <div class="section-title" data-i18n="section.budgets">Monthly Budgets</div>
             <form class="budget-form" id="budgetForm">
-                <select id="budgetCategory" aria-label="Budget category">
-                    <option value="Food">Food</option>
-                    <option value="Rent">Rent</option>
-                    <option value="Entertainment">Entertainment</option>
-                    <option value="Shopping">Shopping</option>
-                    <option value="Transport">Transport</option>
-                    <option value="Utilities">Utilities</option>
-                    <option value="Health">Health</option>
-                    <option value="Other">Other</option>
-                </select>
-                <input type="number" id="budgetAmount" placeholder="Amount $" min="1" step="0.01" required aria-label="Budget amount">
-                <button type="submit" class="secondary">Set</button>
+                <select id="budgetCategory" aria-label="Category"></select>
+                <input type="number" id="budgetAmount" data-i18n-placeholder="placeholder.budgetAmount" min="1" step="0.01" required>
+                <button type="submit" class="secondary" data-i18n="btn.set">Set</button>
             </form>
             <div id="budgetList"></div>
         </div>
 
         <!-- Trend chart -->
         <div class="card">
-            <div class="section-title">Balance Trend</div>
+            <div class="section-title" data-i18n="section.trend">Balance Trend</div>
             <div class="chart-container">
-                <canvas id="trendChart" aria-label="Balance trend over time"></canvas>
+                <canvas id="trendChart"></canvas>
             </div>
         </div>
 
         <!-- Transaction history -->
         <div class="card full-width">
-            <div class="section-title">Transaction History</div>
+            <div class="section-title" data-i18n="section.history">Transaction History</div>
             <div class="toolbar">
-                <input type="search" id="searchInput" placeholder="🔍 Search..." aria-label="Search transactions">
-                <select id="filterType" aria-label="Filter by type">
-                    <option value="all">All</option>
-                    <option value="income">Income</option>
-                    <option value="expense">Expenses</option>
+                <input type="search" id="searchInput" data-i18n-placeholder="placeholder.search" aria-label="Search">
+                <select id="filterType" aria-label="Filter type">
+                    <option value="all" data-i18n="filter.all">All</option>
+                    <option value="income" data-i18n="filter.income">Income</option>
+                    <option value="expense" data-i18n="filter.expenses">Expenses</option>
                 </select>
-                <select id="filterCategory" aria-label="Filter by category">
-                    <option value="all">All categories</option>
+                <select id="filterCategory" aria-label="Filter category">
+                    <option value="all" data-i18n="filter.allCategories">All categories</option>
                 </select>
                 <button class="secondary" id="exportJsonBtn" type="button">⬇ JSON</button>
                 <button class="secondary" id="exportCsvBtn" type="button">⬇ CSV</button>
-                <button class="secondary" id="importBtn" type="button">⬆ Import</button>
-                <button class="danger" id="clearAllBtn" type="button">🗑 Clear All</button>
+                <button class="secondary" id="importBtn" type="button" data-i18n="btn.import">⬆ Import</button>
+                <button class="danger" id="clearAllBtn" type="button" data-i18n="btn.clearAll">🗑 Clear All</button>
                 <input type="file" id="importFile" accept=".json,.csv" hidden>
             </div>
             <div class="transaction-list" id="transactionList"></div>
         </div>
     </div>
+
+    <!-- Footer / Donate -->
+    <footer class="footer">
+        <a
+            class="coffee-btn"
+            href="https://paypal.me/TekiDeki"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-i18n="footer.coffee"
+            aria-label="Merit o cafeluță? / Buy me a coffee"
+        >
+            <span class="coffee-icon" aria-hidden="true">☕</span>
+            <span data-i18n="footer.coffee">Merit o cafeluță?</span>
+        </a>
+        <p class="footer-note" data-i18n="footer.thanks">Mulțumesc pentru susținere! ❤️</p>
+    </footer>
 </div>
 
 <!-- Edit modal -->
-<div class="modal-overlay" id="editModal" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+<div class="modal-overlay" id="editModal" role="dialog" aria-modal="true">
     <div class="modal">
-        <h2 id="editTitle">Edit Transaction</h2>
+        <h2 data-i18n="modal.editTitle">Edit Transaction</h2>
         <form id="editForm">
             <input type="hidden" id="editId">
             <div class="form-group">
-                <label for="editDesc">Description</label>
+                <label for="editDesc" data-i18n="label.description">Description</label>
                 <input type="text" id="editDesc" required maxlength="100">
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="editAmount">Amount ($)</label>
+                    <label for="editAmount" data-i18n="label.amount">Amount</label>
                     <input type="number" id="editAmount" step="0.01" min="0.01" required>
                 </div>
                 <div class="form-group">
-                    <label for="editDate">Date</label>
+                    <label for="editDate" data-i18n="label.date">Date</label>
                     <input type="date" id="editDate" required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="editType">Type</label>
+                    <label for="editType" data-i18n="label.type">Type</label>
                     <select id="editType">
-                        <option value="income">Income</option>
-                        <option value="expense">Expense</option>
+                        <option value="income" data-i18n="type.income">Income</option>
+                        <option value="expense" data-i18n="type.expense">Expense</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="editCategory">Category</label>
-                    <select id="editCategory">
-                        <option value="Food">Food</option>
-                        <option value="Rent">Rent</option>
-                        <option value="Salary">Salary</option>
-                        <option value="Entertainment">Entertainment</option>
-                        <option value="Shopping">Shopping</option>
-                        <option value="Transport">Transport</option>
-                        <option value="Utilities">Utilities</option>
-                        <option value="Health">Health</option>
-                        <option value="Other">Other</option>
-                    </select>
+                    <label for="editCategory" data-i18n="label.category">Category</label>
+                    <select id="editCategory"></select>
                 </div>
             </div>
             <div class="modal-actions">
-                <button type="button" class="secondary" id="cancelEdit">Cancel</button>
-                <button type="submit">Save</button>
+                <button type="button" class="secondary" id="cancelEdit" data-i18n="btn.cancel">Cancel</button>
+                <button type="submit" data-i18n="btn.save">Save</button>
             </div>
         </form>
     </div>
@@ -611,25 +713,351 @@ button.danger:hover { background: #fecaca; }
 (() => {
     'use strict';
 
+    // ================================================================
+    // TRANSLATIONS
+    // ================================================================
+    const I18N = {
+        ro: {
+            "app.title": "Smart Money Manager",
+            "app.subtitle": "Urmărește-ți averea cu inteligență.",
+            "card.balance": "Balanță totală",
+            "card.income": "Venituri totale",
+            "card.expense": "Cheltuieli totale",
+            "card.monthBalance": "Balanța lunii curente",
+            "section.addTransaction": "Adaugă tranzacție",
+            "section.spending": "Analiză cheltuieli",
+            "section.budgets": "Bugete lunare",
+            "section.trend": "Evoluție sold",
+            "section.history": "Istoric tranzacții",
+            "label.description": "Descriere",
+            "label.amount": "Sumă",
+            "label.date": "Data",
+            "label.type": "Tip",
+            "label.category": "Categorie",
+            "label.recurring": "Tranzacție recurentă (lunar)",
+            "placeholder.description": "ex: Cumpărături, Salariu",
+            "placeholder.budgetAmount": "Sumă",
+            "placeholder.search": "🔍 Caută...",
+            "type.income": "Venit",
+            "type.expense": "Cheltuială",
+            "filter.all": "Toate",
+            "filter.income": "Venituri",
+            "filter.expenses": "Cheltuieli",
+            "filter.allCategories": "Toate categoriile",
+            "btn.addTransaction": "➕ Adaugă tranzacție",
+            "btn.set": "Setează",
+            "btn.import": "⬆ Import",
+            "btn.clearAll": "🗑 Șterge tot",
+            "btn.cancel": "Anulează",
+            "btn.save": "Salvează",
+            "modal.editTitle": "Editează tranzacția",
+            "footer.coffee": "Merit o cafeluță?",
+            "footer.thanks": "Mulțumesc pentru susținere! ❤️",
+            "cat.Food": "Mâncare",
+            "cat.Rent": "Chirie",
+            "cat.Salary": "Salariu",
+            "cat.Entertainment": "Divertisment",
+            "cat.Shopping": "Cumpărături",
+            "cat.Transport": "Transport",
+            "cat.Utilities": "Utilități",
+            "cat.Health": "Sănătate",
+            "cat.Other": "Altele",
+            "toast.descRequired": "Adaugă o descriere.",
+            "toast.amountPositive": "Suma trebuie să fie pozitivă.",
+            "toast.dateRequired": "Alege o dată.",
+            "toast.added": "Tranzacție adăugată",
+            "toast.deleted": "Tranzacție ștearsă",
+            "toast.updated": "Tranzacție actualizată",
+            "toast.invalidData": "Date invalide",
+            "toast.budgetSet": "Buget setat",
+            "toast.budgetDeleted": "Buget șters",
+            "toast.noBudgets": "Niciun buget setat.",
+            "toast.emptyList": "Nu ai tranzacții încă. Adaugă una mai sus 👆",
+            "toast.noMatch": "Nicio tranzacție nu corespunde filtrelor.",
+            "toast.confirmDelete": "Ștergi \"{desc}\"?",
+            "toast.confirmClearAll": "Ștergi TOATE tranzacțiile? Acțiunea este ireversibilă.",
+            "toast.confirmClearAll2": "Ești sigur? Recomandăm un export înainte.",
+            "toast.cleared": "Toate tranzacțiile au fost șterse",
+            "toast.exportJson": "Export JSON realizat",
+            "toast.exportCsv": "Export CSV realizat",
+            "toast.imported": "{n} tranzacții importate",
+            "toast.importError": "Eroare la import: {msg}",
+            "toast.unsupported": "Format nesuportat. Folosește JSON sau CSV.",
+            "toast.saveError": "Eroare la salvare: spațiu insuficient?",
+            "toast.nothingToClear": "Nu există date.",
+            "toast.recurringAdded": "{n} tranzacții recurente adăugate automat",
+            "chart.balance": "Sold"
+        },
+        en: {
+            "app.title": "Smart Money Manager",
+            "app.subtitle": "Track your wealth with intelligence.",
+            "card.balance": "Total Balance",
+            "card.income": "Total Income",
+            "card.expense": "Total Expenses",
+            "card.monthBalance": "This Month's Balance",
+            "section.addTransaction": "Add Transaction",
+            "section.spending": "Spending Analytics",
+            "section.budgets": "Monthly Budgets",
+            "section.trend": "Balance Trend",
+            "section.history": "Transaction History",
+            "label.description": "Description",
+            "label.amount": "Amount",
+            "label.date": "Date",
+            "label.type": "Type",
+            "label.category": "Category",
+            "label.recurring": "Recurring transaction (monthly)",
+            "placeholder.description": "e.g., Groceries, Salary",
+            "placeholder.budgetAmount": "Amount",
+            "placeholder.search": "🔍 Search...",
+            "type.income": "Income",
+            "type.expense": "Expense",
+            "filter.all": "All",
+            "filter.income": "Income",
+            "filter.expenses": "Expenses",
+            "filter.allCategories": "All categories",
+            "btn.addTransaction": "➕ Add Transaction",
+            "btn.set": "Set",
+            "btn.import": "⬆ Import",
+            "btn.clearAll": "🗑 Clear All",
+            "btn.cancel": "Cancel",
+            "btn.save": "Save",
+            "modal.editTitle": "Edit Transaction",
+            "footer.coffee": "Buy me a coffee?",
+            "footer.thanks": "Thanks for your support! ❤️",
+            "cat.Food": "Food",
+            "cat.Rent": "Rent",
+            "cat.Salary": "Salary",
+            "cat.Entertainment": "Entertainment",
+            "cat.Shopping": "Shopping",
+            "cat.Transport": "Transport",
+            "cat.Utilities": "Utilities",
+            "cat.Health": "Health",
+            "cat.Other": "Other",
+            "toast.descRequired": "Please add a description.",
+            "toast.amountPositive": "Amount must be a positive number.",
+            "toast.dateRequired": "Please choose a date.",
+            "toast.added": "Transaction added",
+            "toast.deleted": "Transaction deleted",
+            "toast.updated": "Transaction updated",
+            "toast.invalidData": "Invalid data",
+            "toast.budgetSet": "Budget set",
+            "toast.budgetDeleted": "Budget deleted",
+            "toast.noBudgets": "No budgets set.",
+            "toast.emptyList": "No transactions yet. Add one above 👆",
+            "toast.noMatch": "No transactions match your filters.",
+            "toast.confirmDelete": "Delete \"{desc}\"?",
+            "toast.confirmClearAll": "Delete ALL transactions? This action cannot be undone.",
+            "toast.confirmClearAll2": "Are you sure? We recommend exporting first.",
+            "toast.cleared": "All transactions cleared",
+            "toast.exportJson": "JSON export complete",
+            "toast.exportCsv": "CSV export complete",
+            "toast.imported": "{n} transaction(s) imported",
+            "toast.importError": "Import error: {msg}",
+            "toast.unsupported": "Unsupported format. Please use JSON or CSV.",
+            "toast.saveError": "Save error: storage may be full",
+            "toast.nothingToClear": "No data to clear.",
+            "toast.recurringAdded": "{n} recurring transaction(s) added automatically",
+            "chart.balance": "Balance"
+        },
+        "sr-Latn": {
+            "app.title": "Smart Money Manager",
+            "app.subtitle": "Pametno upravljajte svojim finansijama.",
+            "card.balance": "Ukupan saldo",
+            "card.income": "Ukupni prihodi",
+            "card.expense": "Ukupni rashodi",
+            "card.monthBalance": "Saldo ovog meseca",
+            "section.addTransaction": "Dodaj transakciju",
+            "section.spending": "Analiza potrošnje",
+            "section.budgets": "Mesečni budžeti",
+            "section.trend": "Kretanje salda",
+            "section.history": "Istorija transakcija",
+            "label.description": "Opis",
+            "label.amount": "Iznos",
+            "label.date": "Datum",
+            "label.type": "Tip",
+            "label.category": "Kategorija",
+            "label.recurring": "Ponavljajuća transakcija (mesečno)",
+            "placeholder.description": "npr. Namirnice, Plata",
+            "placeholder.budgetAmount": "Iznos",
+            "placeholder.search": "🔍 Pretraga...",
+            "type.income": "Prihod",
+            "type.expense": "Rashod",
+            "filter.all": "Sve",
+            "filter.income": "Prihodi",
+            "filter.expenses": "Rashodi",
+            "filter.allCategories": "Sve kategorije",
+            "btn.addTransaction": "➕ Dodaj transakciju",
+            "btn.set": "Postavi",
+            "btn.import": "⬆ Uvoz",
+            "btn.clearAll": "🗑 Obriši sve",
+            "btn.cancel": "Otkaži",
+            "btn.save": "Sačuvaj",
+            "modal.editTitle": "Izmeni transakciju",
+            "footer.coffee": "Zaslužujem kaficu?",
+            "footer.thanks": "Hvala na podršci! ❤️",
+            "cat.Food": "Hrana",
+            "cat.Rent": "Kirija",
+            "cat.Salary": "Plata",
+            "cat.Entertainment": "Zabava",
+            "cat.Shopping": "Kupovina",
+            "cat.Transport": "Prevoz",
+            "cat.Utilities": "Komunalije",
+            "cat.Health": "Zdravlje",
+            "cat.Other": "Ostalo",
+            "toast.descRequired": "Molimo dodajte opis.",
+            "toast.amountPositive": "Iznos mora biti pozitivan broj.",
+            "toast.dateRequired": "Molimo izaberite datum.",
+            "toast.added": "Transakcija dodata",
+            "toast.deleted": "Transakcija obrisana",
+            "toast.updated": "Transakcija ažurirana",
+            "toast.invalidData": "Neispravni podaci",
+            "toast.budgetSet": "Budžet postavljen",
+            "toast.budgetDeleted": "Budžet obrisan",
+            "toast.noBudgets": "Nijedan budžet nije postavljen.",
+            "toast.emptyList": "Još nema transakcija. Dodajte prvu iznad 👆",
+            "toast.noMatch": "Nijedna transakcija ne odgovara filterima.",
+            "toast.confirmDelete": "Obrisati \"{desc}\"?",
+            "toast.confirmClearAll": "Obrisati SVE transakcije? Ova radnja se ne može poništiti.",
+            "toast.confirmClearAll2": "Da li ste sigurni? Preporučujemo da prvo izvezete podatke.",
+            "toast.cleared": "Sve transakcije obrisane",
+            "toast.exportJson": "JSON izvoz završen",
+            "toast.exportCsv": "CSV izvoz završen",
+            "toast.imported": "{n} transakcija uvezeno",
+            "toast.importError": "Greška pri uvozu: {msg}",
+            "toast.unsupported": "Nepodržan format. Koristite JSON ili CSV.",
+            "toast.saveError": "Greška pri čuvanju: skladište je možda puno",
+            "toast.nothingToClear": "Nema podataka za brisanje.",
+            "toast.recurringAdded": "{n} ponavljajućih transakcija automatski dodato",
+            "chart.balance": "Saldo"
+        },
+        "sr-Cyrl": {
+            "app.title": "Smart Money Manager",
+            "app.subtitle": "Паметно управљајте својим финансијама.",
+            "card.balance": "Укупан салдо",
+            "card.income": "Укупни приходи",
+            "card.expense": "Укупни расходи",
+            "card.monthBalance": "Салдо овог месеца",
+            "section.addTransaction": "Додај трансакцију",
+            "section.spending": "Анализа потрошње",
+            "section.budgets": "Месечни буџети",
+            "section.trend": "Кретање салда",
+            "section.history": "Историја трансакција",
+            "label.description": "Опис",
+            "label.amount": "Износ",
+            "label.date": "Датум",
+            "label.type": "Тип",
+            "label.category": "Категорија",
+            "label.recurring": "Понављајућа трансакција (месечно)",
+            "placeholder.description": "нпр. Намирнице, Плата",
+            "placeholder.budgetAmount": "Износ",
+            "placeholder.search": "🔍 Претрага...",
+            "type.income": "Приход",
+            "type.expense": "Расход",
+            "filter.all": "Све",
+            "filter.income": "Приходи",
+            "filter.expenses": "Расходи",
+            "filter.allCategories": "Све категорије",
+            "btn.addTransaction": "➕ Додај трансакцију",
+            "btn.set": "Постави",
+            "btn.import": "⬆ Увоз",
+            "btn.clearAll": "🗑 Обриши све",
+            "btn.cancel": "Откажи",
+            "btn.save": "Сачувај",
+            "modal.editTitle": "Измени трансакцију",
+            "footer.coffee": "Заслужујем кафицу?",
+            "footer.thanks": "Хвала на подршци! ❤️",
+            "cat.Food": "Храна",
+            "cat.Rent": "Кирија",
+            "cat.Salary": "Плата",
+            "cat.Entertainment": "Забава",
+            "cat.Shopping": "Куповина",
+            "cat.Transport": "Превоз",
+            "cat.Utilities": "Комуналије",
+            "cat.Health": "Здравље",
+            "cat.Other": "Остало",
+            "toast.descRequired": "Молимо додајте опис.",
+            "toast.amountPositive": "Износ мора бити позитиван број.",
+            "toast.dateRequired": "Молимо изаберите датум.",
+            "toast.added": "Трансакција додата",
+            "toast.deleted": "Трансакција обрисана",
+            "toast.updated": "Трансакција ажурирана",
+            "toast.invalidData": "Неисправни подаци",
+            "toast.budgetSet": "Буџет постављен",
+            "toast.budgetDeleted": "Буџет обрисан",
+            "toast.noBudgets": "Ниједан буџет није постављен.",
+            "toast.emptyList": "Још нема трансакција. Додајте прву изнад 👆",
+            "toast.noMatch": "Ниједна трансакција не одговара филтерима.",
+            "toast.confirmDelete": "Обрисати \"{desc}\"?",
+            "toast.confirmClearAll": "Обрисати СВЕ трансакције? Ова радња се не може поништити.",
+            "toast.confirmClearAll2": "Да ли сте сигурни? Препоручујемо да прво извезете податке.",
+            "toast.cleared": "Све трансакције обрисане",
+            "toast.exportJson": "JSON извоз завршен",
+            "toast.exportCsv": "CSV извоз завршен",
+            "toast.imported": "{n} трансакција увезено",
+            "toast.importError": "Грешка при увозу: {msg}",
+            "toast.unsupported": "Неподржан формат. Користите JSON или CSV.",
+            "toast.saveError": "Грешка при чувању: складиште је можда пуно",
+            "toast.nothingToClear": "Нема података за брисање.",
+            "toast.recurringAdded": "{n} понављајућих трансакција аутоматски додато",
+            "chart.balance": "Салдо"
+        }
+    };
+
+    const LOCALE_CONFIG = {
+        'ro':      { locale: 'ro-RO', currency: 'EUR', htmlLang: 'ro' },
+        'en':      { locale: 'en-US', currency: 'USD', htmlLang: 'en' },
+        'sr-Latn': { locale: 'sr-RS', currency: 'RSD', htmlLang: 'sr-Latn' },
+        'sr-Cyrl': { locale: 'sr-RS', currency: 'RSD', htmlLang: 'sr-Cyrl' }
+    };
+
     // ============ CONSTANTS ============
     const STORAGE_KEY = 'smm_transactions_v2';
     const BUDGET_KEY = 'smm_budgets_v2';
     const THEME_KEY = 'smm_theme';
+    const LANG_KEY = 'smm_lang';
     const CATEGORIES = ['Food','Rent','Salary','Entertainment','Shopping','Transport','Utilities','Health','Other'];
-    const CATEGORY_LABELS = {
-        Food: 'Food', Rent: 'Rent', Salary: 'Salary',
-        Entertainment: 'Entertainment', Shopping: 'Shopping',
-        Transport: 'Transport', Utilities: 'Utilities',
-        Health: 'Health', Other: 'Other'
-    };
     const CHART_COLORS = ['#4f46e5','#22c55e','#ef4444','#eab308','#a855f7','#94a3b8','#06b6d4','#f97316','#ec4899'];
 
+    // ============ STATE ============
+    let currentLang = detectInitialLang();
+    let fmt = makeFormatter(currentLang);
+
+    function detectInitialLang() {
+        const saved = localStorage.getItem(LANG_KEY);
+        if (saved && I18N[saved]) return saved;
+        const nav = (navigator.language || 'en').toLowerCase();
+        if (nav.startsWith('ro')) return 'ro';
+        if (nav.startsWith('sr')) {
+            if (nav.includes('latn')) return 'sr-Latn';
+            return 'sr-Cyrl';
+        }
+        if (nav.startsWith('en')) return 'en';
+        return 'en';
+    }
+
+    function makeFormatter(lang) {
+        const cfg = LOCALE_CONFIG[lang] || LOCALE_CONFIG.en;
+        return new Intl.NumberFormat(cfg.locale, {
+            style: 'currency',
+            currency: cfg.currency,
+            minimumFractionDigits: 2
+        });
+    }
+
     // ============ UTILS ============
-    const fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
     const formatMoney = n => fmt.format(n);
     const uid = () => (crypto.randomUUID?.() ?? Date.now().toString(36) + Math.random().toString(36).slice(2));
     const todayISO = () => new Date().toISOString().slice(0, 10);
-    const monthKey = d => d.slice(0, 7); // YYYY-MM
+    const monthKey = d => d.slice(0, 7);
+
+    function t(key, vars = {}) {
+        const dict = I18N[currentLang] || I18N.en;
+        let str = dict[key] ?? I18N.en[key] ?? key;
+        Object.entries(vars).forEach(([k, v]) => {
+            str = str.replace(`{${k}}`, v);
+        });
+        return str;
+    }
 
     function escapeHtml(str) {
         const div = document.createElement('div');
@@ -638,10 +1066,10 @@ button.danger:hover { background: #fecaca; }
     }
 
     function debounce(fn, ms = 200) {
-        let t;
+        let tmr;
         return (...args) => {
-            clearTimeout(t);
-            t = setTimeout(() => fn(...args), ms);
+            clearTimeout(tmr);
+            tmr = setTimeout(() => fn(...args), ms);
         };
     }
 
@@ -669,7 +1097,7 @@ button.danger:hover { background: #fecaca; }
     }
     function saveJSON(key, value) {
         try { localStorage.setItem(key, JSON.stringify(value)); }
-        catch (e) { toast('Save error: storage may be full', 'error'); }
+        catch (e) { toast(t('toast.saveError'), 'error'); }
     }
 
     let transactions = loadJSON(STORAGE_KEY, []);
@@ -717,37 +1145,85 @@ button.danger:hover { background: #fecaca; }
         updateCharts();
     });
 
-    // ============ MONTH NAVIGATION ============
-    let currentMonth = monthKey(todayISO());
+    // ============ I18N APPLICATION ============
+    function applyI18n() {
+        document.documentElement.lang = LOCALE_CONFIG[currentLang].htmlLang;
 
-    function changeMonth(delta) {
-        const [y, m] = currentMonth.split('-').map(Number);
-        const d = new Date(y, m - 1 + delta, 1);
-        currentMonth = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-        updateBudgets();
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            el.textContent = t(key);
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            el.placeholder = t(key);
+        });
+
+        buildCategoryOptions();
+        document.title = t('app.title');
+        render();
     }
 
-    // ============ RECURRING TRANSACTIONS ============
+    function buildCategoryOptions() {
+        const mainSel = document.getElementById('category');
+        const budgetSel = document.getElementById('budgetCategory');
+        const filterSel = document.getElementById('filterCategory');
+        const editSel = document.getElementById('editCategory');
+
+        const mainValue = mainSel.value;
+        mainSel.innerHTML = CATEGORIES.map(c =>
+            `<option value="${c}">${escapeHtml(t('cat.' + c))}</option>`
+        ).join('');
+        if (CATEGORIES.includes(mainValue)) mainSel.value = mainValue;
+
+        const budgetValue = budgetSel.value;
+        budgetSel.innerHTML = CATEGORIES.filter(c => c !== 'Salary').map(c =>
+            `<option value="${c}">${escapeHtml(t('cat.' + c))}</option>`
+        ).join('');
+        if (budgetValue && budgetValue !== 'Salary') budgetSel.value = budgetValue;
+
+        const filterValue = filterSel.value;
+        filterSel.innerHTML = `<option value="all">${escapeHtml(t('filter.allCategories'))}</option>` +
+            CATEGORIES.map(c => `<option value="${c}">${escapeHtml(t('cat.' + c))}</option>`).join('');
+        if (filterValue) filterSel.value = filterValue;
+
+        const editValue = editSel.value;
+        editSel.innerHTML = CATEGORIES.map(c =>
+            `<option value="${c}">${escapeHtml(t('cat.' + c))}</option>`
+        ).join('');
+        if (CATEGORIES.includes(editValue)) editSel.value = editValue;
+    }
+
+    document.getElementById('langSelector').addEventListener('change', (e) => {
+        currentLang = e.target.value;
+        localStorage.setItem(LANG_KEY, currentLang);
+        fmt = makeFormatter(currentLang);
+        applyI18n();
+    });
+
+    // ============ MONTH NAV ============
+    let currentMonth = monthKey(todayISO());
+
+    // ============ RECURRING ============
     function processRecurring() {
         const now = new Date();
         const thisMonth = monthKey(todayISO());
         let added = 0;
-        transactions.forEach(t => {
-            if (!t.recurring) return;
-            const lastDate = new Date(t.date);
+        transactions.forEach(tx => {
+            if (!tx.recurring) return;
+            const lastDate = new Date(tx.date);
             const monthsSince = (now.getFullYear() - lastDate.getFullYear()) * 12 + (now.getMonth() - lastDate.getMonth());
             for (let i = 1; i <= monthsSince; i++) {
                 const d = new Date(lastDate.getFullYear(), lastDate.getMonth() + i, lastDate.getDate());
                 const newDate = d.toISOString().slice(0, 10);
-                if (monthKey(newDate) > t.date.slice(0, 7)) {
+                if (monthKey(newDate) > tx.date.slice(0, 7)) {
                     const exists = transactions.some(x =>
-                        x.recurring && x.desc === t.desc && x.amount === t.amount &&
-                        x.category === t.category && x.date === newDate
+                        x.recurring && x.desc === tx.desc && x.amount === tx.amount &&
+                        x.category === tx.category && x.date === newDate
                     );
                     if (!exists && monthKey(newDate) <= thisMonth) {
                         transactions.push({
-                            id: uid(), desc: t.desc, amount: t.amount, type: t.type,
-                            category: t.category, date: newDate, recurring: true
+                            id: uid(), desc: tx.desc, amount: tx.amount, type: tx.type,
+                            category: tx.category, date: newDate, recurring: true
                         });
                         added++;
                     }
@@ -756,21 +1232,21 @@ button.danger:hover { background: #fecaca; }
         });
         if (added > 0) {
             saveTransactions();
-            toast(`${added} recurring transaction(s) added automatically`, 'success');
+            toast(t('toast.recurringAdded', { n: added }), 'success');
         }
     }
 
-    // ============ CALCULATIONS ============
+    // ============ CALC ============
     function getTotals(list = transactions) {
-        const income = list.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
-        const expenses = list.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+        const income = list.filter(tx => tx.type === 'income').reduce((s, tx) => s + tx.amount, 0);
+        const expenses = list.filter(tx => tx.type === 'expense').reduce((s, tx) => s + tx.amount, 0);
         return { income, expenses, balance: income - expenses };
     }
 
     function getMonthTotal(month, type) {
         return transactions
-            .filter(t => t.type === type && monthKey(t.date) === month)
-            .reduce((s, t) => s + t.amount, 0);
+            .filter(tx => tx.type === type && monthKey(tx.date) === month)
+            .reduce((s, tx) => s + tx.amount, 0);
     }
 
     // ============ RENDER ============
@@ -788,7 +1264,6 @@ button.danger:hover { background: #fecaca; }
         monthEl.style.color = monthBal >= 0 ? 'var(--success)' : 'var(--danger)';
 
         renderList();
-        renderCategoryFilter();
         updateCharts();
         updateBudgets();
     }
@@ -801,49 +1276,40 @@ button.danger:hover { background: #fecaca; }
 
         let filtered = transactions.slice();
         if (query) {
-            filtered = filtered.filter(t =>
-                t.desc.toLowerCase().includes(query) ||
-                (CATEGORY_LABELS[t.category] || t.category).toLowerCase().includes(query)
+            filtered = filtered.filter(tx =>
+                tx.desc.toLowerCase().includes(query) ||
+                t('cat.' + tx.category).toLowerCase().includes(query)
             );
         }
-        if (typeFilter !== 'all') filtered = filtered.filter(t => t.type === typeFilter);
-        if (catFilter !== 'all') filtered = filtered.filter(t => t.category === catFilter);
+        if (typeFilter !== 'all') filtered = filtered.filter(tx => tx.type === typeFilter);
+        if (catFilter !== 'all') filtered = filtered.filter(tx => tx.category === catFilter);
 
         filtered.sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
 
         if (!filtered.length) {
-            list.innerHTML = `<p class="empty">${transactions.length ? 'No transactions match your filters.' : 'No transactions yet. Add one above 👆'}</p>`;
+            list.innerHTML = `<p class="empty">${transactions.length ? t('toast.noMatch') : t('toast.emptyList')}</p>`;
             return;
         }
 
-        list.innerHTML = filtered.map(t => {
-            const isIncome = t.type === 'income';
-            const catLabel = CATEGORY_LABELS[t.category] || t.category;
+        list.innerHTML = filtered.map(tx => {
+            const isIncome = tx.type === 'income';
+            const catLabel = t('cat.' + tx.category);
             return `
-                <div class="transaction-item" data-id="${t.id}">
+                <div class="transaction-item" data-id="${tx.id}">
                     <div class="transaction-info">
-                        <strong>${escapeHtml(t.desc)}${t.recurring ? ' 🔁' : ''}</strong>
-                        <span>${escapeHtml(catLabel)} • ${escapeHtml(t.date)}</span>
+                        <strong>${escapeHtml(tx.desc)}${tx.recurring ? ' 🔁' : ''}</strong>
+                        <span>${escapeHtml(catLabel)} • ${escapeHtml(tx.date)}</span>
                     </div>
                     <div class="transaction-actions">
                         <span class="amount-tag ${isIncome ? 'income' : 'expense'}">
-                            ${isIncome ? '+' : '−'} ${formatMoney(t.amount)}
+                            ${isIncome ? '+' : '−'} ${formatMoney(tx.amount)}
                         </span>
-                        <button class="icon-btn" data-action="edit" data-id="${t.id}" aria-label="Edit">✏️</button>
-                        <button class="icon-btn delete" data-action="delete" data-id="${t.id}" aria-label="Delete">🗑</button>
+                        <button class="icon-btn" data-action="edit" data-id="${tx.id}" aria-label="Edit">✏️</button>
+                        <button class="icon-btn delete" data-action="delete" data-id="${tx.id}" aria-label="Delete">🗑</button>
                     </div>
                 </div>
             `;
         }).join('');
-    }
-
-    function renderCategoryFilter() {
-        const sel = document.getElementById('filterCategory');
-        const current = sel.value;
-        const used = [...new Set(transactions.map(t => t.category))];
-        sel.innerHTML = `<option value="all">All categories</option>` +
-            used.map(c => `<option value="${c}">${escapeHtml(CATEGORY_LABELS[c] || c)}</option>`).join('');
-        if (used.includes(current)) sel.value = current;
     }
 
     // ============ CHARTS ============
@@ -855,16 +1321,23 @@ button.danger:hover { background: #fecaca; }
         updateTrendChart();
     }
 
+    function getTextColor() {
+        return getComputedStyle(document.documentElement).getPropertyValue('--text').trim();
+    }
+    function getTextLightColor() {
+        return getComputedStyle(document.documentElement).getPropertyValue('--text-light').trim();
+    }
+
     function updateSpendingChart() {
         const canvas = document.getElementById('spendingChart');
         const ctx = canvas.getContext('2d');
-        const expenseData = transactions.filter(t => t.type === 'expense');
-        const categories = [...new Set(expenseData.map(t => t.category))];
+        const expenseData = transactions.filter(tx => tx.type === 'expense');
+        const categories = [...new Set(expenseData.map(tx => tx.category))];
         const totals = {};
         categories.forEach(c => totals[c] = 0);
-        expenseData.forEach(t => totals[t.category] += t.amount);
+        expenseData.forEach(tx => totals[tx.category] += tx.amount);
 
-        const labels = categories.map(c => CATEGORY_LABELS[c] || c);
+        const labels = categories.map(c => t('cat.' + c));
         const data = categories.map(c => totals[c]);
         const colors = categories.map((_, i) => CHART_COLORS[i % CHART_COLORS.length]);
 
@@ -876,12 +1349,8 @@ button.danger:hover { background: #fecaca; }
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom', labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--text').trim(), padding: 12 } },
-                        tooltip: {
-                            callbacks: {
-                                label: (c) => `${c.label}: ${formatMoney(c.parsed)}`
-                            }
-                        }
+                        legend: { position: 'bottom', labels: { color: getTextColor(), padding: 12 } },
+                        tooltip: { callbacks: { label: (c) => `${c.label}: ${formatMoney(c.parsed)}` } }
                     },
                     cutout: '60%'
                 }
@@ -890,7 +1359,7 @@ button.danger:hover { background: #fecaca; }
             spendingChart.data.labels = labels;
             spendingChart.data.datasets[0].data = data;
             spendingChart.data.datasets[0].backgroundColor = colors;
-            spendingChart.options.plugins.legend.labels.color = getComputedStyle(document.documentElement).getPropertyValue('--text').trim();
+            spendingChart.options.plugins.legend.labels.color = getTextColor();
             spendingChart.update();
         }
     }
@@ -899,15 +1368,14 @@ button.danger:hover { background: #fecaca; }
         const canvas = document.getElementById('trendChart');
         const ctx = canvas.getContext('2d');
 
-        // Cumulative balance by day
         const sorted = transactions.slice().sort((a, b) => a.date.localeCompare(b.date));
         let running = 0;
         const labels = [];
         const data = [];
-        sorted.forEach(t => {
-            running += t.type === 'income' ? t.amount : -t.amount;
-            if (labels[labels.length - 1] !== t.date) {
-                labels.push(t.date);
+        sorted.forEach(tx => {
+            running += tx.type === 'income' ? tx.amount : -tx.amount;
+            if (labels[labels.length - 1] !== tx.date) {
+                labels.push(tx.date);
                 data.push(running);
             } else {
                 data[data.length - 1] = running;
@@ -920,7 +1388,7 @@ button.danger:hover { background: #fecaca; }
                 data: {
                     labels,
                     datasets: [{
-                        label: 'Balance',
+                        label: t('chart.balance'),
                         data,
                         borderColor: '#4f46e5',
                         backgroundColor: 'rgba(79, 70, 229, 0.1)',
@@ -935,20 +1403,18 @@ button.danger:hover { background: #fecaca; }
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { display: false },
-                        tooltip: {
-                            callbacks: { label: (c) => formatMoney(c.parsed.y) }
-                        }
+                        tooltip: { callbacks: { label: (c) => formatMoney(c.parsed.y) } }
                     },
                     scales: {
                         y: {
                             ticks: {
-                                color: getComputedStyle(document.documentElement).getPropertyValue('--text-light').trim(),
+                                color: getTextLightColor(),
                                 callback: v => formatMoney(v)
                             },
                             grid: { color: 'rgba(148,163,184,0.15)' }
                         },
                         x: {
-                            ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-light').trim(), maxRotation: 0, autoSkip: true, maxTicksLimit: 6 },
+                            ticks: { color: getTextLightColor(), maxRotation: 0, autoSkip: true, maxTicksLimit: 6 },
                             grid: { display: false }
                         }
                     }
@@ -957,6 +1423,7 @@ button.danger:hover { background: #fecaca; }
         } else {
             trendChart.data.labels = labels;
             trendChart.data.datasets[0].data = data;
+            trendChart.data.datasets[0].label = t('chart.balance');
             trendChart.update();
         }
     }
@@ -967,20 +1434,20 @@ button.danger:hover { background: #fecaca; }
         const entries = Object.entries(budgets);
 
         if (!entries.length) {
-            list.innerHTML = `<p class="empty" style="padding: 15px;">No budgets set.</p>`;
+            list.innerHTML = `<p class="empty" style="padding: 15px;">${escapeHtml(t('toast.noBudgets'))}</p>`;
             return;
         }
 
         list.innerHTML = entries.map(([cat, limit]) => {
             const spent = transactions
-                .filter(t => t.type === 'expense' && t.category === cat && monthKey(t.date) === currentMonth)
-                .reduce((s, t) => s + t.amount, 0);
+                .filter(tx => tx.type === 'expense' && tx.category === cat && monthKey(tx.date) === currentMonth)
+                .reduce((s, tx) => s + tx.amount, 0);
             const pct = Math.min(100, (spent / limit) * 100);
             const cls = pct >= 100 ? 'over' : pct >= 80 ? 'warn' : '';
             return `
                 <div class="budget-item">
                     <div class="budget-header">
-                        <strong>${escapeHtml(CATEGORY_LABELS[cat] || cat)}</strong>
+                        <strong>${escapeHtml(t('cat.' + cat))}</strong>
                         <span>${formatMoney(spent)} / ${formatMoney(limit)}</span>
                     </div>
                     <div class="budget-bar">
@@ -995,7 +1462,6 @@ button.danger:hover { background: #fecaca; }
     }
 
     // ============ EVENTS ============
-    // Add transaction
     document.getElementById('transactionForm').addEventListener('submit', (e) => {
         e.preventDefault();
         const desc = document.getElementById('desc').value.trim();
@@ -1005,38 +1471,37 @@ button.danger:hover { background: #fecaca; }
         const category = document.getElementById('category').value;
         const recurring = document.getElementById('recurring').checked;
 
-        if (!desc) { toast('Please add a description.', 'error'); return; }
-        if (!Number.isFinite(amount) || amount <= 0) { toast('Amount must be a positive number.', 'error'); return; }
-        if (!date) { toast('Please choose a date.', 'error'); return; }
+        if (!desc) { toast(t('toast.descRequired'), 'error'); return; }
+        if (!Number.isFinite(amount) || amount <= 0) { toast(t('toast.amountPositive'), 'error'); return; }
+        if (!date) { toast(t('toast.dateRequired'), 'error'); return; }
 
         transactions.push({ id: uid(), desc, amount, type, category, date, recurring });
         saveTransactions();
         e.target.reset();
         document.getElementById('date').value = todayISO();
-        toast('Transaction added', 'success');
+        document.getElementById('type').value = 'expense';
+        toast(t('toast.added'), 'success');
         render();
     });
 
-    // Delete / Edit (event delegation)
     document.getElementById('transactionList').addEventListener('click', (e) => {
         const btn = e.target.closest('[data-action]');
         if (!btn) return;
         const id = btn.dataset.id;
-        const tx = transactions.find(t => t.id === id);
+        const tx = transactions.find(x => x.id === id);
         if (!tx) return;
 
         if (btn.dataset.action === 'delete') {
-            if (!confirm(`Delete "${tx.desc}"?`)) return;
-            transactions = transactions.filter(t => t.id !== id);
+            if (!confirm(t('toast.confirmDelete', { desc: tx.desc }))) return;
+            transactions = transactions.filter(x => x.id !== id);
             saveTransactions();
-            toast('Transaction deleted', 'success');
+            toast(t('toast.deleted'), 'success');
             render();
         } else if (btn.dataset.action === 'edit') {
             openEditModal(tx);
         }
     });
 
-    // Edit modal
     const editModal = document.getElementById('editModal');
     function openEditModal(tx) {
         document.getElementById('editId').value = tx.id;
@@ -1057,11 +1522,11 @@ button.danger:hover { background: #fecaca; }
     document.getElementById('editForm').addEventListener('submit', (e) => {
         e.preventDefault();
         const id = document.getElementById('editId').value;
-        const tx = transactions.find(t => t.id === id);
+        const tx = transactions.find(x => x.id === id);
         if (!tx) return;
         const desc = document.getElementById('editDesc').value.trim();
         const amount = parseFloat(document.getElementById('editAmount').value);
-        if (!desc || !Number.isFinite(amount) || amount <= 0) { toast('Invalid data', 'error'); return; }
+        if (!desc || !Number.isFinite(amount) || amount <= 0) { toast(t('toast.invalidData'), 'error'); return; }
         tx.desc = desc;
         tx.amount = amount;
         tx.date = document.getElementById('editDate').value;
@@ -1069,25 +1534,23 @@ button.danger:hover { background: #fecaca; }
         tx.category = document.getElementById('editCategory').value;
         saveTransactions();
         closeEditModal();
-        toast('Transaction updated', 'success');
+        toast(t('toast.updated'), 'success');
         render();
     });
 
-    // Filters
     document.getElementById('searchInput').addEventListener('input', debounce(renderList, 150));
     document.getElementById('filterType').addEventListener('change', renderList);
     document.getElementById('filterCategory').addEventListener('change', renderList);
 
-    // Budget
     document.getElementById('budgetForm').addEventListener('submit', (e) => {
         e.preventDefault();
         const cat = document.getElementById('budgetCategory').value;
         const amount = parseFloat(document.getElementById('budgetAmount').value);
-        if (!Number.isFinite(amount) || amount <= 0) { toast('Invalid amount', 'error'); return; }
+        if (!Number.isFinite(amount) || amount <= 0) { toast(t('toast.amountPositive'), 'error'); return; }
         budgets[cat] = amount;
         saveBudgets();
         e.target.reset();
-        toast('Budget set', 'success');
+        toast(t('toast.budgetSet'), 'success');
         updateBudgets();
     });
 
@@ -1096,11 +1559,10 @@ button.danger:hover { background: #fecaca; }
         if (!btn) return;
         delete budgets[btn.dataset.budgetDelete];
         saveBudgets();
-        toast('Budget deleted', 'success');
+        toast(t('toast.budgetDeleted'), 'success');
         updateBudgets();
     });
 
-    // Export / Import
     function download(filename, content, mime = 'application/json') {
         const blob = new Blob([content], { type: mime });
         const url = URL.createObjectURL(blob);
@@ -1113,16 +1575,29 @@ button.danger:hover { background: #fecaca; }
 
     document.getElementById('exportJsonBtn').addEventListener('click', () => {
         download(`finances-${todayISO()}.json`, JSON.stringify({ transactions, budgets }, null, 2));
-        toast('JSON export complete', 'success');
+        toast(t('toast.exportJson'), 'success');
     });
 
     document.getElementById('exportCsvBtn').addEventListener('click', () => {
-        const header = 'Date,Description,Amount,Type,Category,Recurring\n';
-        const rows = transactions.map(t =>
-            [t.date, `"${t.desc.replace(/"/g, '""')}"`, t.amount, t.type, t.category, t.recurring ? 'yes' : 'no'].join(',')
+        const headerMap = {
+            ro: 'Data,Descriere,Suma,Tip,Categorie,Recurenta',
+            en: 'Date,Description,Amount,Type,Category,Recurring',
+            'sr-Latn': 'Datum,Opis,Iznos,Tip,Kategorija,Ponavljajuca',
+            'sr-Cyrl': 'Датум,Опис,Износ,Тип,Категорија,Понављајућа'
+        };
+        const yesNo = {
+            ro: ['da', 'nu'],
+            en: ['yes', 'no'],
+            'sr-Latn': ['da', 'ne'],
+            'sr-Cyrl': ['да', 'не']
+        };
+        const header = (headerMap[currentLang] || headerMap.en) + '\n';
+        const [yes, no] = yesNo[currentLang] || yesNo.en;
+        const rows = transactions.map(tx =>
+            [tx.date, `"${tx.desc.replace(/"/g, '""')}"`, tx.amount, tx.type, tx.category, tx.recurring ? yes : no].join(',')
         ).join('\n');
         download(`finances-${todayISO()}.csv`, header + rows, 'text/csv;charset=utf-8');
-        toast('CSV export complete', 'success');
+        toast(t('toast.exportCsv'), 'success');
     });
 
     document.getElementById('importBtn').addEventListener('click', () => {
@@ -1152,29 +1627,29 @@ button.danger:hover { background: #fecaca; }
                         imported.push({
                             id: uid(), desc, amount: num, type: type === 'income' ? 'income' : 'expense',
                             category: CATEGORIES.includes(category) ? category : 'Other',
-                            date, recurring: recurring === 'yes'
+                            date, recurring: ['da','yes','да'].includes(recurring.toLowerCase())
                         });
                     });
                 } else {
-                    toast('Unsupported format. Please use JSON or CSV.', 'error');
+                    toast(t('toast.unsupported'), 'error');
                     return;
                 }
-                const valid = imported.filter(t => t && t.desc && Number.isFinite(parseFloat(t.amount)));
-                valid.forEach(t => {
+                const valid = imported.filter(tx => tx && tx.desc && Number.isFinite(parseFloat(tx.amount)));
+                valid.forEach(tx => {
                     transactions.push({
-                        id: uid(), desc: String(t.desc).slice(0, 100),
-                        amount: Math.abs(parseFloat(t.amount)),
-                        type: t.type === 'income' ? 'income' : 'expense',
-                        category: CATEGORIES.includes(t.category) ? t.category : 'Other',
-                        date: t.date || todayISO(),
-                        recurring: !!t.recurring
+                        id: uid(), desc: String(tx.desc).slice(0, 100),
+                        amount: Math.abs(parseFloat(tx.amount)),
+                        type: tx.type === 'income' ? 'income' : 'expense',
+                        category: CATEGORIES.includes(tx.category) ? tx.category : 'Other',
+                        date: tx.date || todayISO(),
+                        recurring: !!tx.recurring
                     });
                 });
                 saveTransactions();
-                toast(`${valid.length} transaction(s) imported`, 'success');
+                toast(t('toast.imported', { n: valid.length }), 'success');
                 render();
             } catch (err) {
-                toast('Import error: ' + err.message, 'error');
+                toast(t('toast.importError', { msg: err.message }), 'error');
             }
         };
         reader.readAsText(file);
@@ -1197,27 +1672,22 @@ button.danger:hover { background: #fecaca; }
         return out;
     }
 
-    // Clear all
     document.getElementById('clearAllBtn').addEventListener('click', () => {
-        if (!transactions.length) { toast('No data to clear.', 'warning'); return; }
-        if (!confirm('Delete ALL transactions? This action cannot be undone.')) return;
-        if (!confirm('Are you sure? We recommend exporting first.')) return;
+        if (!transactions.length) { toast(t('toast.nothingToClear'), 'warning'); return; }
+        if (!confirm(t('toast.confirmClearAll'))) return;
+        if (!confirm(t('toast.confirmClearAll2'))) return;
         transactions = [];
         saveTransactions();
-        toast('All transactions cleared', 'success');
+        toast(t('toast.cleared'), 'success');
         render();
     });
 
-    // ============ SERVICE WORKER (offline) ============
+    // ============ SERVICE WORKER ============
     if ('serviceWorker' in navigator) {
         const swCode = `
-            const CACHE = 'smm-v2';
-            self.addEventListener('install', e => {
-                self.skipWaiting();
-            });
-            self.addEventListener('activate', e => {
-                e.waitUntil(clients.claim());
-            });
+            const CACHE = 'smm-v3';
+            self.addEventListener('install', e => { self.skipWaiting(); });
+            self.addEventListener('activate', e => { e.waitUntil(clients.claim()); });
             self.addEventListener('fetch', e => {
                 if (e.request.method !== 'GET') return;
                 e.respondWith(
@@ -1242,11 +1712,11 @@ button.danger:hover { background: #fecaca; }
 
     // ============ INIT ============
     function init() {
+        document.getElementById('langSelector').value = currentLang;
         initTheme();
         document.getElementById('date').value = todayISO();
         processRecurring();
-        render();
-        // Refresh chart when system theme changes
+        applyI18n();
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
             if (!localStorage.getItem(THEME_KEY)) {
                 document.documentElement.style.colorScheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
