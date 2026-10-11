@@ -68,29 +68,44 @@ body {
 
 .container { width: 100%; max-width: 1100px; }
 
+/* ============ HEADER ============ */
 header {
     margin-bottom: 30px;
     text-align: center;
     position: relative;
 }
 
-header h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 8px; }
-header p { color: var(--text-light); }
+header h1 {
+    font-size: 2.5rem;
+    color: var(--primary);
+    margin-bottom: 12px;
+}
 
+/* Subtitle */
+header p {
+    color: var(--text-light);
+    font-size: 1rem;
+    margin-bottom: 20px;   /* empty row before the toggle */
+}
+
+/* Theme toggle pushed below the subtitle */
 .theme-toggle {
-    position: absolute;
-    right: 0;
-    top: 0;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: var(--card);
     border: 1px solid var(--border);
     color: var(--text);
-    padding: 8px 12px;
+    padding: 10px 16px;
     border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: 1.1rem;
     box-shadow: var(--shadow);
+    transition: background 0.2s, transform 0.1s;
 }
 .theme-toggle:hover { background: var(--bg-alt); }
+.theme-toggle:active { transform: scale(0.96); }
 
 .dashboard {
     display: grid;
@@ -899,7 +914,6 @@ button.danger:hover { background: #fecaca; }
         const canvas = document.getElementById('trendChart');
         const ctx = canvas.getContext('2d');
 
-        // Cumulative balance by day
         const sorted = transactions.slice().sort((a, b) => a.date.localeCompare(b.date));
         let running = 0;
         const labels = [];
@@ -995,7 +1009,6 @@ button.danger:hover { background: #fecaca; }
     }
 
     // ============ EVENTS ============
-    // Add transaction
     document.getElementById('transactionForm').addEventListener('submit', (e) => {
         e.preventDefault();
         const desc = document.getElementById('desc').value.trim();
@@ -1017,7 +1030,6 @@ button.danger:hover { background: #fecaca; }
         render();
     });
 
-    // Delete / Edit (event delegation)
     document.getElementById('transactionList').addEventListener('click', (e) => {
         const btn = e.target.closest('[data-action]');
         if (!btn) return;
@@ -1036,7 +1048,6 @@ button.danger:hover { background: #fecaca; }
         }
     });
 
-    // Edit modal
     const editModal = document.getElementById('editModal');
     function openEditModal(tx) {
         document.getElementById('editId').value = tx.id;
@@ -1073,12 +1084,10 @@ button.danger:hover { background: #fecaca; }
         render();
     });
 
-    // Filters
     document.getElementById('searchInput').addEventListener('input', debounce(renderList, 150));
     document.getElementById('filterType').addEventListener('change', renderList);
     document.getElementById('filterCategory').addEventListener('change', renderList);
 
-    // Budget
     document.getElementById('budgetForm').addEventListener('submit', (e) => {
         e.preventDefault();
         const cat = document.getElementById('budgetCategory').value;
@@ -1100,7 +1109,6 @@ button.danger:hover { background: #fecaca; }
         updateBudgets();
     });
 
-    // Export / Import
     function download(filename, content, mime = 'application/json') {
         const blob = new Blob([content], { type: mime });
         const url = URL.createObjectURL(blob);
@@ -1197,7 +1205,6 @@ button.danger:hover { background: #fecaca; }
         return out;
     }
 
-    // Clear all
     document.getElementById('clearAllBtn').addEventListener('click', () => {
         if (!transactions.length) { toast('No data to clear.', 'warning'); return; }
         if (!confirm('Delete ALL transactions? This action cannot be undone.')) return;
@@ -1246,7 +1253,6 @@ button.danger:hover { background: #fecaca; }
         document.getElementById('date').value = todayISO();
         processRecurring();
         render();
-        // Refresh chart when system theme changes
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
             if (!localStorage.getItem(THEME_KEY)) {
                 document.documentElement.style.colorScheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
