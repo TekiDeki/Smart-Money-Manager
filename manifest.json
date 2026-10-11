@@ -1,23 +1,32 @@
 {
   "name": "Smart Money Manager",
-  "short_name": "MoneyMgr",
-  "description": "A personal finance tracker to manage your wealth and expenses.",
+  "short_name": "Money",
+  "description": "Track your finances intelligently",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#f8fafc",
   "theme_color": "#4f46e5",
+  "lang": "en",
   "icons": [
     {
-      "src": "icon-192.png",
-      "type": "image/png",
+      "src": "./icons/icon-192.png",
       "sizes": "192x192",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "icon-512.png",
-      "type": "image/png",
+      "src": "./icons/icon-512.png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
