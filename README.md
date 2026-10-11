@@ -55,8 +55,8 @@ This project is licensed under Apache License 2.0
 
 ## 📬 Contact
 
-- **GitHub:** [@trompyx](https://github.com/TekiDeki)
-- **Email:** [your-email@example.com](mailto:tekideki.pro@gmail.com)
+- **GitHub:** [@TekiDeki](https://github.com/TekiDeki)
+- **Email:** [tekideki.pro@gmail.com](mailto:tekideki.pro@gmail.com)
 
 ---
 
