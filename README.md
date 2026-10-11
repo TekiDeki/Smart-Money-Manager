@@ -11,6 +11,7 @@
 - 💰 **Income & expense tracking** – Monitor daily expenses and monthly income
 - 🗂️ **Transaction categorization** – Organize spending into buckets like Food, Rent, and Entertainment
 - 🔍 **Spending insights** – Understand your behavior and make smarter decisions
+- 📱 **Installable PWA** – Add it to your home screen and use it like a native app
 - 🔒 **Secure & efficient** – Your financial data, protected
 
 ## 🚀 Live Demo
@@ -23,14 +24,14 @@ No installation, no server, no dependencies — just open the link and start man
 
 ## 📱 Install on Mobile
 
-Smart Money Manager works directly in any mobile browser, and you can also add it to your home screen so it behaves like a native app — no app store needed.
+Smart Money Manager is a **Progressive Web App (PWA)**, which means you can install it directly from your browser — no app store needed.
 
 ### 🤖 Android (Chrome / Edge / Brave)
 
 1. Open **[https://TekiDeki.github.io/Smart-Money-Manager/](https://TekiDeki.github.io/Smart-Money-Manager/)** in Chrome.
 2. Tap the **⋮ menu** (three dots, top-right).
-3. Select **"Add to Home screen"** or **"Install app"**.
-4. Confirm by tapping **"Add"** / **"Install"**.
+3. Select **"Install app"** or **"Add to Home screen"**.
+4. Confirm by tapping **"Install"**.
 5. The app icon will appear on your home screen — tap it to launch full-screen.
 
 ### 🍎 iPhone / iPad (Safari)
@@ -48,7 +49,7 @@ Smart Money Manager works directly in any mobile browser, and you can also add i
 3. Click **"Install"**.
 4. The app opens in its own window, just like a native desktop app.
 
-> **Tip:** Once added to your home screen, the app launches in full-screen mode without browser UI — giving you a clean, native-like experience.
+> **Tip:** Once installed, the app works offline thanks to the service worker (`sw.js`) and launches in full-screen mode without browser UI.
 
 ## 📦 Run Locally
 
@@ -71,19 +72,28 @@ python -m http.server 8000
 
 Then open `http://localhost:8000` in your browser.
 
+> ⚠️ **Note:** For the PWA features (install prompt, offline mode) to work, the app must be served over **HTTPS** or **localhost**. Opening `index.html` directly via `file://` will disable the service worker.
+
 ## 🛠️ Tech Stack
 
 - **HTML5** – Structure
 - **CSS3** – Styling
 - **JavaScript (Vanilla)** – Logic and interactivity
 - **Chart.js / D3.js** – Interactive data visualizations
+- **Service Worker** – Offline support
+- **Web App Manifest** – Installable PWA
 
 ## 📁 Project Structure
 
 ```
 Smart-Money-Manager/
-├── index.html      # Standalone app (HTML + CSS + JS)
-└── README.md
+├── index.html          # Standalone app (HTML + CSS + JS)
+├── manifest.json       # PWA manifest (name, icons, theme)
+├── sw.js               # Service worker (offline caching)
+├── icon-192.png        # App icon (192×192)
+├── icon-512.png        # App icon (512×512)
+├── LICENSE             # Apache License 2.0
+└── README.md           # This file
 ```
 
 ## 📖 Usage
@@ -112,7 +122,7 @@ Contributions are welcome! Feel free to fork the repository and submit a pull re
 
 ## 📄 License
 
-This project is licensed under Apache License 2.0
+This project is licensed under the **Apache License 2.0** — see the [LICENSE](LICENSE) file for details.
 
 ## 📬 Contact
 
