@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#4f46e5">
 <meta name="description" content="Smart Money Manager — track your finances intelligently">
 <title>Smart Money Manager</title>
-<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Smart%20Money%20Manager%22%2C%22short_name%22%3A%22Money%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f8fafc%22%2C%22theme_color%22%3A%22%234f46e5%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A%2F%2Fwww.w3.org%2F2000%2Fsvg%2527%2520viewBox%253D%25270%25200%252064%252064%2527%253E%253Crect%2520width%253D%252764%2527%2520height%253D%252764%2527%2520rx%253D%252714%2527%2520fill%253D%2527%25234f46e5%2527%2F%253E%253Ctext%2520x%253D%252732%2527%2520y%253D%252742%2527%2520font-size%253D%252734%2527%2520fill%253D%2527white%2527%2520text-anchor%253D%2527middle%2527%2520font-family%253D%2527sans-serif%2527%253E%2524%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%2264x64%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+<link rel="manifest" href="./manifest.json">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 :root {
@@ -1682,33 +1682,14 @@ button.danger:hover { background: #fecaca; }
         render();
     });
 
-    // ============ SERVICE WORKER ============
-    if ('serviceWorker' in navigator) {
-        const swCode = `
-            const CACHE = 'smm-v3';
-            self.addEventListener('install', e => { self.skipWaiting(); });
-            self.addEventListener('activate', e => { e.waitUntil(clients.claim()); });
-            self.addEventListener('fetch', e => {
-                if (e.request.method !== 'GET') return;
-                e.respondWith(
-                    caches.match(e.request).then(cached => {
-                        const network = fetch(e.request).then(res => {
-                            if (res.ok && new URL(e.request.url).origin === location.origin) {
-                                const clone = res.clone();
-                                caches.open(CACHE).then(c => c.put(e.request, clone));
-                            }
-                            return res;
-                        }).catch(() => cached);
-                        return cached || network;
-                    })
-                );
-            });
-        `;
-        try {
-            const blob = new Blob([swCode], { type: 'application/javascript' });
-            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
-        } catch {}
-    }
+// ============ SERVICE WORKER ============
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+            .then(reg => console.log('✅ SW registered:', reg.scope))
+            .catch(err => console.error('❌ SW error:', err));
+    });
+}
 
     // ============ INIT ============
     function init() {
