@@ -1,13 +1,13 @@
 {
   "name": "Smart Money Manager",
   "short_name": "Money",
-  "description": "Track your finances intelligently",
+  "description": "A browser-local ledger for income, expenses and monthly budgets, with backups and offline charts.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "background_color": "#f8fafc",
-  "theme_color": "#4f46e5",
+  "orientation": "any",
+  "background_color": "#f3f5fa",
+  "theme_color": "#4338ca",
   "lang": "en",
   "icons": [
     {

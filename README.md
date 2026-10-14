@@ -1,141 +1,100 @@
 # Smart Money Manager
 
-**Smart Money Manager** is an intuitive, web-based financial tool designed to help you monitor your wealth, income, and expenses with real-time analytics and interactive charts.
+A browser-local ledger for **income, expenses and monthly budget limits**, with exact totals, reviewed imports and offline charts.
 
-🌐 **Live Demo:** [https://TekiDeki.github.io/Smart-Money-Manager/](https://TekiDeki.github.io/Smart-Money-Manager/)
+**[Open the app](https://tekideki.github.io/Smart-Money-Manager/)** · [Source](https://github.com/TekiDeki/Smart-Money-Manager) · [Apache-2.0](LICENSE)
 
-## ✨ Features
+## What it does
 
-- 📊 **Real-time analytics** – Track your financial activity as it happens
-- 📈 **Interactive charts** – Visualize your spending habits dynamically
-- 💰 **Income & expense tracking** – Monitor daily expenses and monthly income
-- 🗂️ **Transaction categorization** – Organize spending into buckets like Food, Rent, and Entertainment
-- 🔍 **Spending insights** – Understand your behavior and make smarter decisions
-- 📱 **Installable PWA** – Add it to your home screen and use it like a native app
-- 🔒 **Secure & efficient** – Your financial data, protected
+- Add, edit, delete, search and paginate entries in nine categories. Amounts can be zero or positive; refunds can be recorded as income. All exports contain the **entire ledger**, regardless of visible filters.
+- Switch between a selected month and all recorded time. Cards and charts use that period; search/type/category filters affect only the transaction list. **Net cash flow is not a verified bank balance** and does not include unrecorded opening balances or bank activity.
+- Set recurring monthly budget **limits**, compare them with actual expense entries for the selected budget month, and see remaining amounts or overruns. Limits apply across months; changing a limit is not a historical budget revision.
+- Use one explicitly selected currency per ledger: RON, RSD, EUR, USD, GBP or CHF. Language changes **never** change currency. Selecting another currency only relabels amounts, after confirmation; there is **no exchange-rate conversion** or multi-currency accounting.
+- English, Romanian, Serbian Latin and Serbian Cyrillic; light/dark themes; keyboard-operated controls and exact-data tables alongside charts.
+- Keep using the cached app and bundled charts offline after a successful online load. There is no runtime CDN dependency.
 
-## 🚀 Live Demo
+## Exact amounts, clear limits
 
-The application is hosted on **GitHub Pages** and runs entirely in your browser:
+Amounts accept a dot **or** comma decimal separator and up to **six decimal places**. Thousands separators, exponent notation and partially numeric input are rejected. `1,234` means **1.234**, not 1,234 units.
 
-👉 **[https://TekiDeki.github.io/Smart-Money-Manager/](https://TekiDeki.github.io/Smart-Money-Manager/)**
+Per-entry amounts are between 0 and **1,000,000,000**; budget limits must be greater than zero. Valid dates are 1900–2100. A ledger is limited to **10,000 entries**; import files to **5,000,000 bytes**. Browser storage quotas can impose a lower practical capacity, especially because legacy data is deliberately retained.
 
-No installation, no server, no dependencies — just open the link and start managing your money.
+Sums use `BigInt` at a scale of one million, and exact decimal formatting is retained even for large totals. Chart geometry uses floating-point values for visualization; its accompanying tables and tooltips show the exact amounts. This is a personal journal, not double-entry accounting, financial advice, tax software or a bank service.
 
-## 📱 Install on Mobile
+## Saving and existing data
 
-Smart Money Manager is a **Progressive Web App (PWA)**, which means you can install it directly from your browser — no app store needed.
+Financial data is written to a single new local-storage value, **`smm_data_v3`**, only after full validation. The stored value is written before in-memory data or forms are changed. A failed write leaves the previous ledger and entered form text in place.
 
-### 🤖 Android (Chrome / Edge / Brave)
+The old **`smm_transactions_v2`** and **`smm_budgets_v2`** keys are read when no v3 ledger exists and are **never overwritten or deleted by this version**. Theme/language preferences retain their existing keys. No startup financial write, silent reset or automatic recurrence generation occurs. The first save of a nonempty legacy ledger requires explicit confirmation of its inferred currency.
 
-1. Open **[https://TekiDeki.github.io/Smart-Money-Manager/](https://TekiDeki.github.io/Smart-Money-Manager/)** in Chrome.
-2. Tap the **⋮ menu** (three dots, top-right).
-3. Select **"Install app"** or **"Add to Home screen"**.
-4. Confirm by tapping **"Install"**.
-5. The app icon will appear on your home screen — tap it to launch full-screen.
+Corrupt data, unsupported schema versions or legacy values outside the supported precision/range enter **read-only recovery mode**, rather than silently discarding or rounding entries. Use **Download raw local recovery data**, keep the file private and obtain help inspecting it locally. Raw recovery files contain original stored strings and are **not normal import files**; they do not automatically repair a corrupt ledger. Do not clear browser storage as a troubleshooting step.
 
-### 🍎 iPhone / iPad (Safari)
+Do not edit simultaneously in old and new versions or several tabs. Modern browsers with Web Locks serialize cooperating writes; a changed stored snapshot blocks stale writes. Without Web Locks, snapshot checking is a best-effort safeguard, not an atomic multi-tab compare-and-swap. The old v2 keys are recovery copies, **not synchronized mirrors** of the new ledger. If an old version changes them, export raw recovery data and reconcile deliberately; do not assume old-version changes have been merged.
 
-1. Open **[https://TekiDeki.github.io/Smart-Money-Manager/](https://TekiDeki.github.io/Smart-Money-Manager/)** in **Safari** (must be Safari, not Chrome).
-2. Tap the **Share button** (□ with ↑ arrow) at the bottom.
-3. Scroll down and tap **"Add to Home Screen"**.
-4. Name it (e.g. *Smart Money Manager*) and tap **"Add"**.
-5. The icon will appear on your home screen and open like a standalone app.
+## Monthly entries: always review first
 
-### 💻 Desktop (Chrome / Edge)
+A confirmed monthly template produces **journal copies**, not payments, bank instructions or notifications. Use **Review due monthly entries**, inspect the preview, and apply it explicitly. Nothing is generated automatically at launch.
 
-1. Open the live demo link.
-2. Click the **install icon** (⊕ or monitor icon) in the address bar.
-3. Click **"Install"**.
-4. The app opens in its own window, just like a native desktop app.
+- Copies retain the template’s day, clamped to the end of shorter months: January 31 → February 28/29 → March 31.
+- Nothing dated after the browser’s local today is generated. One source/month pair is generated once; copies are not themselves templates.
+- Deleting a generated copy records a removed-occurrence marker so it is not recreated. JSON backups retain these markers; CSV does not.
+- Old `recurring` flags are retained but remain **unconfirmed** because old generated entries cannot be reliably distinguished from separate legitimate entries. An explicit edit plus checking the monthly-template box starts future copies **next month**, without guessing historical duplicates.
+- New templates normally begin copying in the month after their original entry. Existing generated entries are not rewritten when a template is edited or stopped. A review is bounded to 1,000 due copies and 120 months per template; an older template must be reviewed/edited first. The preview shows the total count and the first 50 entries.
 
-> **Tip:** Once installed, the app works offline thanks to the service worker (`sw.js`) and launches in full-screen mode without browser UI.
+## Backups and imports
 
-## 📦 Run Locally
+**JSON is the complete backup**: schema version, currency, all entries, budget limits and removed-occurrence markers. Keep regular private copies outside the browser. CSV is an exchange format containing transactions and their recurrence metadata, **not** budgets, ledger currency or removed-occurrence markers.
 
-Since the app is a standalone `index.html` file, you can run it locally in two ways:
+Every import has a validate/preview step and an explicit apply step. A merge is the default:
 
-### Option 1: Open directly in browser
+- Identical IDs with identical normalized contents are skipped.
+- An existing ID with different contents, differing budget limits for the same category or a currency mismatch rejects the entire merge.
+- Different IDs remain separate, even for otherwise identical legitimate entries. There is no destructive fingerprint-based deduplication.
+- Whole-ledger replacement is available only after an explicit backup/replacement acknowledgement. No financial write happens merely by selecting or previewing a file.
 
-Just double-click `index.html` — it works out of the box.
+Both legacy JSON (`transactions` and `budgets`) and the original four localized CSV formats are supported when their records validate. Currency-less files require currency selection and confirmation. Legacy CSV has no IDs, so **reimporting it can create duplicates**; its preview warns about this.
 
-### Option 2: Serve with a local server (recommended)
+CSV supports quoted commas, double quotes and newlines. Export prefixes potentially formula-like descriptions with an apostrophe and records that reversible escape in a dedicated column. Reimport restores the exact text. Spreadsheet behavior varies: treat exported files as private data, not trusted executable spreadsheet content. Do not remove machine columns if you want a reliable roundtrip.
 
-```bash
-# Clone the repository
+## Privacy and limitations
+
+No app account, bank connection, cloud sync, tracking script or analytics is used. Application financial data is not submitted to a server. Static hosting still receives ordinary resource requests and network metadata. Chart.js is embedded in `index.html`, rather than fetched from a third-party CDN.
+
+**Local data is unencrypted.** It can be accessed by other software with browser access or scripts sharing the same origin. GitHub Pages project sites under one host share an origin; this is not a vault or an isolation guarantee. Browser clearing, device failure, private-mode cleanup or changing origin/browser can make data unavailable. Browser/file download behavior and storage permissions differ. Keep private backups; never publish financial JSON/CSV/recovery files to this repository.
+
+## Install and offline use
+
+The **Install app** button uses the native browser prompt when available; otherwise it displays localized browser-specific instructions. Installation and availability depend on the browser/device, HTTPS or trustworthy localhost. A normal tab cannot reliably detect every prior installation, and accepting a prompt does not prove installation finished.
+
+After a successful online load, the scoped service worker caches the app shell, icons and license notices. Updates do not force a reload or clear financial data. On an older cached version, revisit online and reload **when convenient**, after saving/exporting anything needed. The existing manifest start URL and icon identity are preserved; orientation now permits both portrait and landscape.
+
+## Run and test
+
+The main application remains one HTML file with inline styles, application code and its pinned chart library. No build step is needed to use or host the committed app.
+
+```sh
 git clone https://github.com/TekiDeki/Smart-Money-Manager.git
 cd Smart-Money-Manager
-
-# Start a simple local server (Python 3)
 python -m http.server 8000
+# Open http://localhost:8000/
 ```
 
-Then open `http://localhost:8000` in your browser.
+Opening `index.html` directly supports basic use where file-origin storage is permitted, but service workers/normal PWA installation require HTTPS or localhost. Local browser storage is tied to the origin; another port or a downloaded file does not automatically share the live app’s data. Use JSON exports to transfer deliberately.
 
-> ⚠️ **Note:** For the PWA features (install prompt, offline mode) to work, the app must be served over **HTTPS** or **localhost**. Opening `index.html` directly via `file://` will disable the service worker.
+Core regression tests require Node.js 18+ and no npm install:
 
-## 🛠️ Tech Stack
-
-- **HTML5** – Structure
-- **CSS3** – Styling
-- **JavaScript (Vanilla)** – Logic and interactivity
-- **Chart.js / D3.js** – Interactive data visualizations
-- **Service Worker** – Offline support
-- **Web App Manifest** – Installable PWA
-
-## 📁 Project Structure
-
-```
-Smart-Money-Manager/
-├── index.html          # Standalone app (HTML + CSS + JS)
-├── manifest.json       # PWA manifest (name, icons, theme)
-├── sw.js               # Service worker (offline caching)
-├── icon-192.png        # App icon (192×192)
-├── icon-512.png        # App icon (512×512)
-├── LICENSE             # Apache License 2.0
-└── README.md           # This file
+```sh
+node tests/core.test.cjs
 ```
 
-## 📖 Usage
+The suite exercises exact amounts, Gregorian dates, legacy normalization, merge conflicts, full CSV roundtrips, reviewed recurrence and capacity limits. Additional release checks cover real browser interactions, four languages/two themes, responsive widths, storage failures, hostile input, offline operation and PWA upgrades. Automated accessibility checks are useful but are not a WCAG certification; simulated installation checks are not physical-device installation guarantees.
 
-1. Open the app in your browser (or launch it from your home screen)
-2. Add your income and expense transactions
-3. Assign each transaction to a category (Food, Rent, Entertainment, etc.)
-4. View real-time charts and analytics on your dashboard
-5. Analyze trends to improve your spending habits
+For GitHub Pages, deploy the existing `main` branch at `/ (root)` or an equivalent static workflow. Keep `index.html`, `sw.js`, `manifest.json`, icons and license notices together.
 
-## 🚀 Deploy Your Own
+## Dependencies and licenses
 
-Want to host your own copy? It's easy with **GitHub Pages**:
+Application code: **Apache-2.0**, © 2026 TekiDeki. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
-1. Fork or clone this repository
-2. Go to **Settings → Pages**
-3. Under **Build and deployment**:
-   - **Source:** `Deploy from a branch`
-   - **Branch:** `main` and folder `/ (root)`
-4. Click **Save**
-5. Your site will be live at `https://<your-username>.github.io/Smart-Money-Manager/`
+Embedded **Chart.js 4.5.1**, with its bundled **@kurkle/color 0.3.2**, is MIT-licensed. See [THIRD-PARTY-NOTICES.txt](THIRD-PARTY-NOTICES.txt) for the preserved notices and the verified official Chart.js npm tarball SHA-512 integrity value. There is no D3.js dependency. Releasing application code under Apache-2.0 does not relicense bundled MIT code.
 
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to fork the repository and submit a pull request.
-
-## 📄 License
-
-This project is licensed under the **Apache License 2.0** — see the [LICENSE](LICENSE) file for details.
-
-## 📬 Contact
-
-- **GitHub:** [@TekiDeki](https://github.com/TekiDeki)
-- **Live App:** [TekiDeki.github.io/Smart-Money-Manager](https://TekiDeki.github.io/Smart-Money-Manager/)
-
----
-
-**Take control of your financial future today with a smart, secure, and efficient money manager.**
-
-
-## Install app
-
-Use the **Install app** button near the footer. On supported browsers it opens the native installation prompt when available. Otherwise it shows localized instructions for Safari on iPhone/iPad, Android, and desktop browsers. Installation is controlled by the browser; no installation is claimed without its confirmation. The button is hidden in a standalone/minimal-ui app window and after an `appinstalled` event in the current session. A normal browser tab cannot always detect a previous installation.
-
-Installation needs HTTPS or trustworthy localhost. The controls add no dependencies, tracking, network calls or storage keys; existing application data is not modified. On an existing cached version, revisit online and refresh after the service worker has updated to see the button. No automatic reload is forced.
+[Support the project](https://paypal.me/TekiDeki) · [@TekiDeki](https://github.com/TekiDeki)
