@@ -1,5 +1,5 @@
 // sw.js — Smart Money Manager
-const CACHE_NAME = 'smm-v3';
+const CACHE_NAME = 'smm-v4';
 const ASSETS = [
   './',
   './index.html',
