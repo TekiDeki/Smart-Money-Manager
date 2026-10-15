@@ -1,4 +1,4 @@
-Smart Money Manager — third-party notices
+Smart Money Manager - third-party notices
 
 Application code: Copyright 2026 TekiDeki. Apache-2.0; see LICENSE.
 The embedded chart library and its bundled color dependency retain their own MIT licenses.
