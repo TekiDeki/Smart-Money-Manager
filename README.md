@@ -17,7 +17,7 @@ A browser-local ledger for **income, expenses and monthly budget limits**, with 
 
 Amounts accept a dot **or** comma decimal separator and up to **six decimal places**. Thousands separators, exponent notation and partially numeric input are rejected. `1,234` means **1.234**, not 1,234 units.
 
-Per-entry amounts are between 0 and **1,000,000,000**; budget limits must be greater than zero. Valid dates are 1900–2100. A ledger is limited to **10,000 entries**; import files to **5,000,000 bytes**. Browser storage quotas can impose a lower practical capacity, especially because legacy data is deliberately retained.
+Per-entry amounts are between 0 and **1,000,000,000**; budget limits must be greater than zero. Valid dates are 1900-2100. A ledger is limited to **10,000 entries**; import files to **5,000,000 bytes**. Browser storage quotas can impose a lower practical capacity, especially because legacy data is deliberately retained.
 
 Sums use `BigInt` at a scale of one million, and exact decimal formatting is retained even for large totals. Chart geometry uses floating-point values for visualization; its accompanying tables and tooltips show the exact amounts. This is a personal journal, not double-entry accounting, financial advice, tax software or a bank service.
 
