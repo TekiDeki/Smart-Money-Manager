@@ -43,6 +43,11 @@
     a { padding-block: 9px; }
     #tekideki-source { padding-block: 9px; }
   }
+
+  /* regula casei: tinte de atingere pe mobil - titlul de acordeon se apasa */
+  @media (pointer: coarse), (max-width: 700px) {
+    summary { min-height: 34px; display: flex; align-items: center; }
+  }
 </style>
 </head><body>
 <a class="skip" href="#main" data-t="skip">Skip to content</a>
